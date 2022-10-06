@@ -4,10 +4,13 @@ const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const RegisterThread = require('../../../Domains/threads/entities/RegisterThread')
 const RegisteredThread = require('../../../Domains/threads/entities/RegisteredThread')
 const pool = require('../../database/postgres/pool');
-const ThreadRepositoryPostres = require('../ThreadRepositoryPostgres')
+const ThreadRepositoryPostres = require('../ThreadRepositoryPostgres');
+const CommentTableTestHelper = require('../../../../tests/CommentTableTestHelper');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('ThreadRepositoryPostgres', ()=>{
     afterEach(async ()=>{
+        await CommentTableTestHelper.cleanTable()
         await ThreadTableTestHelper.cleanTable()
         await UsersTableTestHelper.cleanTable()
     })
@@ -61,12 +64,28 @@ describe('ThreadRepositoryPostgres', ()=>{
         }),
         it('should error when thread id not found', async ()=>{
             // Arrange
-             const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {});
+             const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {})
 
             // Action & Assert
             await expect(threadRepositoryPostgres.getThread('asdasd'))
                 .rejects
-                .toThrowError(InvariantError);
+                .toThrowError(InvariantError)
         })
+    }),
+    describe('getThread function', ()=>{
+        it('should get thread correctly', async()=>{
+           // stub
+            const threadId = await ThreadTableTestHelper.addThreadDetailWithReturnId()
+            const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {})
+            const  { id }  = await threadRepositoryPostgres.getThreadDetail(threadId)
+            expect(id).toEqual(threadId)
+        }),
+        it('should throw error to get thread unregistered', async()=>{
+            // stub
+             const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {})
+             await expect( threadRepositoryPostgres.getThreadDetail("jjj"))
+             .rejects
+             .toThrowError(NotFoundError)
+         })
     })
 })

@@ -8,7 +8,6 @@ class AddThreadUseCase {
     }
 
     async execute(useCasePayload, id){
-        // claims token
         useCasePayload.ownerid = id
         const registerThread = new RegisterThread(useCasePayload)
         return this._threadRepository.addThread(registerThread)

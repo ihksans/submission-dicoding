@@ -13,7 +13,7 @@ exports.up = pgm => {
           type: 'VARCHAR(50)',
           notNull: true,
         },
-        commentId: {
+        commentid: {
             type: 'VARCHAR(50)',
             notNull: true,
             references: '"comments"',

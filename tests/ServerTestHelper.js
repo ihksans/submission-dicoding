@@ -2,13 +2,8 @@
 const pool = require('../src/Infrastructures/database/postgres/pool');
 const Jwt = require('@hapi/jwt')
 const ServerTestHelper = {
-  async getAccessToken() {
-    const request = {
-      id: 'user-888',
-      password: 'secret',
-      username: 'admintest',
-      fullname: 'admintest'
-    }
+  async getAccessToken(request) {
+    
     const accessToken = Jwt.token.generate(
       request,
       process.env.ACCESS_TOKEN_KEY

@@ -22,6 +22,13 @@ DomainErrorTranslator._directories = {
   'REGISTER_THREAD.TITLE_CONTAIN_RESTRICTED_CHARACTER': new InvariantError('tidak dapat membuat thread baru karena karakter username melebihi batas limit'),
   'REGISTERED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan title dan body'),
   'REGISTERED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('title dan body harus string'),
+  'COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED': new InvariantError('method belum diimplementasikan'),
+  'REGISTER_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'),
+  'REGISTER_COMMENT.TITLE_CONTAIN_RESTRICTED_CHARACTER': new InvariantError('tidak dapat membuat comment terdapat ketergantungan data'),
+  'REGISTER_COMMENT.LIMIT_MAX_CHARACTHERS': new InvariantError('tidak dapat membuat comment baru karena karakter melebihi batas'),
+  'REGISTERED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan body'),
+  'REGISTERED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat cooment baru karena tipe data tidak sesuai'),
+
 };
 
 module.exports = DomainErrorTranslator;

@@ -1,17 +1,18 @@
-/* istanbul ignore file */
 const pool = require('../../database/postgres/pool');
-const ThreadTableTestHelper = require('../../../../tests/UsersTableTestHelper');
+const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 
 const container = require('../../container');
 const createServer = require('../createServer');
+const CommentTableTestHelper = require('../../../../tests/CommentTableTestHelper');
 
 describe('/threads endpoint', ()=>{
     afterAll(async ()=>{
         await pool.end()
     })
     afterEach(async ()=>{
+        await CommentTableTestHelper.cleanTable()
         await ThreadTableTestHelper.cleanTable()
         await UsersTableTestHelper.cleanTable();
     })
@@ -21,15 +22,15 @@ describe('/threads endpoint', ()=>{
           const payload = {
             title: 'title',
             body: 'dummy body',
-          };
+          }
           const userPaylaod = {
             id: 'user-888',
             password: 'secret',
             username: 'admintest',
             fullname: 'admintest'
-          };
-          const user = await UsersTableTestHelper.addUser(userPaylaod);
-          const accessToken = await ServerTestHelper.getAccessToken();
+          }
+          await UsersTableTestHelper.addUser(userPaylaod);
+          const accessToken = await ServerTestHelper.getAccessToken(userPaylaod);
           const server = await createServer(container);
           // Action
           const response = await server.inject({
@@ -48,4 +49,33 @@ describe('/threads endpoint', ()=>{
           expect(responseJson.data.addedThread.title).toEqual(payload.title);
         })
     })
+    describe('when Get /threads/{threadId}', () => {
+      it('should response 200 and response thread data', async () => {
+        
+        const userPaylaod = {
+          id: 'user-888',
+          password: 'secret',
+          username: 'admintest',
+          fullname: 'admintest'
+        }
+        // stub
+        const threadId = await ThreadTableTestHelper.addThreadDetailWithReturnId()
+        await UsersTableTestHelper.addUser(userPaylaod);
+        const accessToken = await ServerTestHelper.getAccessToken(userPaylaod);
+        const server = await createServer(container);
+        // Action
+        const response = await server.inject({
+          url: '/threads/'+ threadId,
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        // Assert
+        const responseJson = JSON.parse(response.payload);
+        expect(response.statusCode).toEqual(200);
+        expect(responseJson.status).toEqual('success');
+        expect(responseJson.data.thread).toBeDefined();
+      })
+  })
 })

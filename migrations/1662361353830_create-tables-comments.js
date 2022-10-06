@@ -6,7 +6,7 @@ exports.up = pgm => {
           type: 'VARCHAR(50)',
           primaryKey: true,
         },
-        body: {
+        content: {
             type: 'TEXT',
           },
         ownerid: {
@@ -15,7 +15,7 @@ exports.up = pgm => {
             references: '"users"',
             onDelete: 'cascade',
         },
-        threadId: {
+        threadid: {
             type: 'VARCHAR(50)',
             notNull: true,
             references: '"threads"',

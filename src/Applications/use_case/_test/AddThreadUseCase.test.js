@@ -1,8 +1,5 @@
-const RegisteredThread = require('../../../Domains/threads/entities/RegisteredThread')
-const RegisterThread = require('../../../Domains/threads/entities/RegisterThread')
 const ThreadRepository  = require('../../../Domains/threads/ThreadRepository')
 const AddThread = require('../AddThreadUseCase')
-const AuthenticationTokenManager = require('../../security/AuthenticationTokenManager');
 
 describe('AddTreadUseCase', ()=>{
     it('should orchestrating the add thread action correctly', async()=>{

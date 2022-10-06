@@ -23,10 +23,10 @@ const UsersTableTestHelper = {
     return result.rows;
   },
   async addUserWithReturnId() {
-    const id = 'user-111'
+    const id = 'user-112'
     const query = {
       text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id, username, fullname',
-      values: [id, 'tempuser', 'secret', 'temp'],
+      values: [id, 'tempuser2', 'secret', 'temp'],
     };
 
      await pool.query(query)
