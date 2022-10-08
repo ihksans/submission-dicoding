@@ -13,16 +13,15 @@ describe('a RegisterThread entities', ()=>{
       const payload = {
         body: 123,
         title: 123,
-        ownerid: 123,
+        ownerId: 123,
       }
-
       // Action and Assert
       expect(()=> new RegisterThread(payload)).toThrowError("REGISTER_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION")
     }),
     it('should throw error when payload did not meet data type with regex', () =>{
     // Arrange
     const payload = {
-        ownerid: 'asdasdasdasdasd',
+        ownerId: 'asdasdasdasdasd',
         title: 'sample thread ">">?"}|++_',
         body: 'sample body',
       }
@@ -32,18 +31,17 @@ describe('a RegisterThread entities', ()=>{
     it('should throw error when title contains more than limit character', () => {
         // Arrange
         const payload = {
-            ownerid: 'asdasdasdasdasd',
+            ownerId: 'asdasdasdasdasd',
             title: 'samplethredaaaaaaaaaasamplethredaaaaaaaaaasamplethredaaaaaaaaaasamplethredaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaa',
             body: 'sample',
           }
-      
         // Action and Assert
         expect(() => new RegisterThread(payload)).toThrowError("REGISTER_THREAD.LIMIT_MAX_CHARACTHERS")
     }),
     it('should throw error when body contains more than limit character', ()=>{
        // Arrange
        const payload = {
-        ownerid: 'asdasdasdasdasd',
+        ownerId: 'asdasdasdasdasd',
         title: 'aaa',
         body: 'samplethredaaaaaaaaaasamplethredaaaaaaaaaasamplethredaaaaaaaaaasamplethredaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasampleaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaathredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaasamplethredaaaaaaaaaaaaaaaaaaaaaaaaaa',
       }
@@ -53,14 +51,14 @@ describe('a RegisterThread entities', ()=>{
     it('should create thread object correctly', () => {
       // Arrange
       const payload = {
-        ownerid: 'asdasdasdasdasd',
+        ownerId: 'asdasdasdasdasd',
         title: 'dicoding',
         body: 'dicoding',
       }
       // Action
-      const { ownerid, title, body } = new RegisterThread(payload)
+      const { ownerId, title, body } = new RegisterThread(payload)
       // Assert
-      expect(ownerid).toEqual(payload.ownerid)
+      expect(ownerId).toEqual(payload.ownerId)
       expect(title).toEqual(payload.title)
       expect(body).toEqual(payload.body)
     })

@@ -23,12 +23,16 @@ DomainErrorTranslator._directories = {
   'REGISTERED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan title dan body'),
   'REGISTERED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('title dan body harus string'),
   'COMMENT_REPOSITORY.METHOD_NOT_IMPLEMENTED': new InvariantError('method belum diimplementasikan'),
-  'REGISTER_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'),
+  'REGISTER_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat comment baru karena tipe data tidak sesuai'),
   'REGISTER_COMMENT.TITLE_CONTAIN_RESTRICTED_CHARACTER': new InvariantError('tidak dapat membuat comment terdapat ketergantungan data'),
   'REGISTER_COMMENT.LIMIT_MAX_CHARACTHERS': new InvariantError('tidak dapat membuat comment baru karena karakter melebihi batas'),
   'REGISTERED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan body'),
-  'REGISTERED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat cooment baru karena tipe data tidak sesuai'),
-
+  'REGISTERED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat comment baru karena tipe data tidak sesuai'),
+  'REGISTER_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat reply baru karena tipe data tidak sesuai'),
+  'REGISTER_REPLY.TITLE_CONTAIN_RESTRICTED_CHARACTER': new InvariantError('tidak dapat membuat reply terdapat ketergantungan data'),
+  'REGISTER_REPLY.LIMIT_MAX_CHARACTHERS': new InvariantError('tidak dapat membuat reply baru karena karakter melebihi batas'),
+  'REGISTERED_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('harus mengirimkan body'),
+  'REGISTERED_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat reply baru karena tipe data tidak sesuai'),
 };
 
 module.exports = DomainErrorTranslator;

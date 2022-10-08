@@ -11,7 +11,7 @@ describe('Add Reply Use Case', ()=>{
         const threadId = 'thread-123'
         const response = {
             id: 'comment-123',
-            ownerid: id,
+            ownerId: id,
             content: 'comment',
             comentid: commentId
         }

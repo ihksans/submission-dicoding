@@ -6,15 +6,11 @@ class DeleteReplyUseCase {
         this._threadRepository = threadRepository
         this._replyRepository = replyRepository
     }
-    async execute(id, replyid, commentid, threadid){
-        console.log("area 1")
-        await this._threadRepository.getThread(threadid)
-        console.log("area 2")
-        await this._commentRepository.getComment({id: commentid})
-        console.log("area 3")
-        await this._replyRepository.getReply({id: replyid})
-        console.log("area 4")
-        return this._replyRepository.deleteReply({id: replyid, ownerId: id})
+    async execute(id, replyId, commentId, threadId){
+        await this._threadRepository.getThread(threadId)
+        await this._commentRepository.getComment(commentId)
+        await this._replyRepository.getReply(replyId)
+        return this._replyRepository.deleteReply(replyId, id)
     }
 }
 module.exports = DeleteReplyUseCase

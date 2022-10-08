@@ -12,13 +12,13 @@ exports.up = pgm => {
         body: {
             type: 'TEXT',
           },
-        ownerid: {
+        ownerId: {
             type: 'VARCHAR(50)',
             notNull: true,
             references: '"users"',
             onDelete: 'cascade',
         },
-        createdAt: {
+        date: {
             type: 'timestamp',
             notNull: true,
             default: pgm.func('current_timestamp'),

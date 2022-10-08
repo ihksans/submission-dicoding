@@ -4,19 +4,19 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 const ReplyTableTestHelper = {
     async addReply({
         id = 'reply-123',
-        ownerid = 'user-123',
+        ownerId = 'user-123',
         content = 'content',
-        commentid = 'comment-123'
+        commentId = 'comment-123'
     }){
         const query = {
             text : 'INSERT INTO replies VALUES($1, $2, $3, $4)',
-            values: [id, content, ownerid, commentid],
+            values: [id, content, ownerId, commentId],
         }
         await pool.query(query)
-        return {id, ownerid}
+        return {id, ownerId}
     },
     async cleanTable(){
-        await pool.query('DELETE FROM replies WHERE 1=1');
+        await pool.query('DELETE FROM replies WHERE 1=1')
     },
     async findReplyById(id){
         const query = {

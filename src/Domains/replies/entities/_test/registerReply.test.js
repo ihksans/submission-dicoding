@@ -3,7 +3,6 @@ describe('a Register Reply entities', ()=>{
     it('should throw error when payload did not contain needed property', ()=>{
         // Arrange
         const payload = { }
-
         // Action and Assert
         expect(()=> new RegisterReply(payload)).toThrowError("REGISTER_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION")
     }),

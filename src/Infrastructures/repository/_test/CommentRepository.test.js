@@ -6,7 +6,6 @@ const pool = require('../../database/postgres/pool');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const ForbiddenError = require('../../../Commons/exceptions/ForbiddenError');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
-
 describe('CommentRepositoryPostgres', ()=>{
     afterEach(async ()=>{
         await CommentTableTestHelper.cleanTable()
@@ -21,8 +20,6 @@ describe('CommentRepositoryPostgres', ()=>{
             // Arrange 
             const registerComment = new RegisterComment({
                 content: 'comment',
-                ownerid : 'user-111',
-                threadid: 'thread-123'
             })
             const userPayload = {
                 userid: 'user-555',
@@ -33,11 +30,10 @@ describe('CommentRepositoryPostgres', ()=>{
             const fakeIdGenerator = () => '123'
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator)
             const {threadId, userid}  = await ThreadTableTestHelper.addThreadWithReturnId(userPayload)
-
             // Action 
-            registerComment.ownerid = userid
-            registerComment.threadid = threadId
-            await commentRepositoryPostgres.addComment(registerComment)
+            registerComment.ownerId = userid
+            registerComment.threadId = threadId
+            await commentRepositoryPostgres.addComment(registerComment.content, registerComment.ownerId, registerComment.threadId)
             // Assert
             const comment = await CommentTableTestHelper.findCommentById('comment-123')
             expect(comment).toHaveLength(1)
@@ -55,23 +51,20 @@ describe('CommentRepositoryPostgres', ()=>{
                 password: 'secret',
                 fullname: 'usernamedev'
             }
-
             const commentId = "comment-555"
             const {threadId, userid}  = await ThreadTableTestHelper.addThreadWithReturnId(userPayload)
-
-            const {id, ownerid} = await CommentTableTestHelper.addComment({
+            await CommentTableTestHelper.addComment({
                 id: commentId,
-                ownerid: userid,
+                ownerId: userid,
                 content:registerComment.content, 
-                threadid: threadId 
+                threadId: threadId 
             })
             function fakeDateGenerator() {
                 this.toISOString = () => '2022-10-05'
-              }
+            }
             const fakeIdGenerator = () => '123'
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator, fakeDateGenerator)
-            const { isDeleted } = await commentRepositoryPostgres.deleteComment({id: commentId, ownerId: userid })
-            
+            const { isDeleted } = await commentRepositoryPostgres.deleteComment(commentId, userid )
             // Action
             expect(isDeleted).toEqual(true)
         }),
@@ -86,22 +79,21 @@ describe('CommentRepositoryPostgres', ()=>{
                 password: 'secret',
                 fullname: 'usernamedev'
             }
-            const fakeOwnerId = "user-777"
+            const fakeownerId = "user-777"
             const commentId = "comment-555"
             const {threadId, userid}  = await ThreadTableTestHelper.addThreadWithReturnId(userPayload)
-
             await CommentTableTestHelper.addComment({
                 id: commentId,
-                ownerid: userid,
+                ownerId: userid,
                 content:registerComment.content, 
-                threadid: threadId 
+                threadId: threadId 
             })
             function fakeDateGenerator() {
                 this.toISOString = () => '2022-10-05'
             }
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {}, fakeDateGenerator)
             // Action & Assert
-            await expect(commentRepositoryPostgres.deleteComment({id: commentId, ownerid: fakeOwnerId }))
+            await expect(commentRepositoryPostgres.deleteComment({id: commentId, ownerId: fakeownerId }))
             .rejects
             .toThrowError(ForbiddenError)
         }),
@@ -109,8 +101,8 @@ describe('CommentRepositoryPostgres', ()=>{
             // Arrange 
             const registerComment = new RegisterComment({
                 content: 'comment',
-                ownerid : 'user-111',
-                threadid: 'thread-123'
+                ownerId : 'user-111',
+                threadId: 'thread-123'
             })
             const userPayload = {
                 userid: 'user-555',
@@ -121,17 +113,15 @@ describe('CommentRepositoryPostgres', ()=>{
             const fakeIdGenerator = () => '123'
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator)
             const {threadId, userid}  = await ThreadTableTestHelper.addThreadWithReturnId(userPayload)
-
             // Action 
-            registerComment.ownerid = userid
-            registerComment.threadid = threadId
-            await commentRepositoryPostgres.addComment(registerComment)
+            registerComment.ownerId = userid
+            registerComment.threadId = threadId
+            await commentRepositoryPostgres.addComment(registerComment.content, registerComment.ownerId, registerComment.threadId)
             // Assert
-            const {id, content, ownerid, threadid} = await commentRepositoryPostgres.getComment({id:'comment-123'})
+            const {id, content, ownerId} = await commentRepositoryPostgres.getComment('comment-123')
             expect(id).toEqual("comment-123")
             expect(content).toEqual(registerComment.content)
-            expect(ownerid).toEqual(userid)
-            expect(threadid).toEqual(threadId)
+            expect(ownerId).toEqual(userid)
         }),
         it('should error when thread id not found', async ()=>{
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {})

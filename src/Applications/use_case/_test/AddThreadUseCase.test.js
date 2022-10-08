@@ -11,7 +11,7 @@ describe('AddTreadUseCase', ()=>{
         const ownerId = 'user-123'
         const response = {
             id: 'asdasd',
-            ownerid : ownerId,
+            ownerId : ownerId,
             title : 'title',
             body: 'title'
         }

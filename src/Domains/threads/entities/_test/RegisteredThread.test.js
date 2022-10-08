@@ -1,12 +1,10 @@
 const RegisteredThread = require('../RegisteredThread')
-
 describe('Registered Thread Test', ()=>{
     it('should error with wrong payload request', ()=>{
         // Arrange
         const payload = {
             title: '123123'
         }
-
         // Action and Assert
         expect(()=> new RegisteredThread(payload)).toThrowError('REGISTERED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')
     }),
@@ -14,16 +12,15 @@ describe('Registered Thread Test', ()=>{
         // Arrange
         const payload = {
             id: 'asdasd',
-            ownerid: 'asdasd',
+            ownerId: 'asdasd',
             title: 'dicoding',
             body: 'dicoding',
         }
         // Action
-        const {id, ownerid, title, body} = new RegisteredThread(payload)
-
+        const {id, ownerId, title, body} = new RegisteredThread(payload)
         // Assert
         expect(id).toEqual(payload.id)
-        expect(ownerid).toEqual(payload.ownerid)
+        expect(ownerId).toEqual(payload.ownerId)
         expect(title).toEqual(payload.title)
         expect(body).toEqual(payload.body)
     }),
@@ -31,10 +28,9 @@ describe('Registered Thread Test', ()=>{
         const payload = {
             id: 123123,
             title: 123123,
-            ownerid: 123123123,
+            ownerId: 123123123,
             body: 123123123,
         }
-
         expect(()=> new RegisteredThread(payload)).toThrowError('REGISTERED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')
     })
 })

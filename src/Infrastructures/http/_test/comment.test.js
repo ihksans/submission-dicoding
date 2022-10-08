@@ -1,11 +1,10 @@
-const pool = require('../../database/postgres/pool');
-const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
-const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
-const CommentTableTestHelper = require('../../../../tests/CommentTableTestHelper');
-const ServerTestHelper = require('../../../../tests/ServerTestHelper');
-const container = require('../../container');
-const createServer = require('../createServer');
-
+const pool = require('../../database/postgres/pool')
+const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper')
+const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper')
+const CommentTableTestHelper = require('../../../../tests/CommentTableTestHelper')
+const ServerTestHelper = require('../../../../tests/ServerTestHelper')
+const container = require('../../container')
+const createServer = require('../createServer')
 describe('/comments endpoint', ()=>{
     afterEach(async ()=>{
         await CommentTableTestHelper.cleanTable()
@@ -20,27 +19,24 @@ describe('/comments endpoint', ()=>{
             // Arrange
             const payload = {
                 content: 'comment',
-                ownerid : null,
-                threadid: null,
+                ownerId : null,
+                threadId: null,
             }
             var commentPayload = {
                 content: 'comment'
             }
-            const ownerid = 'user-281'
+            const ownerId = 'user-281'
             const userPaylaod = {
-                userid: ownerid,
+                userid: ownerId,
                 username: 'useraddcomment',
                 password: 'secret',
                 fullname: 'usernamedev',
-                id: ownerid
+                id: ownerId
             }
-
             const {threadId, userid}  = await ThreadTableTestHelper.addThreadWithReturnId(userPaylaod);
-            
-            payload.threadid = threadId
-            payload.ownerid = userid
+            payload.threadId = threadId
+            payload.ownerId = userid
             const accessToken = await ServerTestHelper.getAccessToken(userPaylaod)
-            
             const server = await createServer(container)
             // Action
             const response = await server.inject({
@@ -64,21 +60,21 @@ describe('/comments endpoint', ()=>{
             const registerComment = ({
                 content: 'comment',
             })
-            const ownerid = 'user-281'
+            const ownerId = 'user-281'
             const userPaylaod = {
-                userid: ownerid,
+                userid: ownerId,
                 username: 'useraddcomment',
                 password: 'secret',
                 fullname: 'usernamedev',
-                id: ownerid
+                id: ownerId
             }
             const commentId = "comment-555"
-            const {threadId, userid}  = await ThreadTableTestHelper.addThreadWithReturnId(userPaylaod);
+            const {threadId, userid}  = await ThreadTableTestHelper.addThreadWithReturnId(userPaylaod)
             const {id} = await CommentTableTestHelper.addComment({
                 id: commentId,
-                ownerid: userid,
+                ownerId: userid,
                 content:registerComment.content, 
-                threadid: threadId 
+                threadId: threadId 
             })
             const accessToken = await ServerTestHelper.getAccessToken(userPaylaod)
             const server = await createServer(container)

@@ -14,25 +14,25 @@ describe('a Registered Comment', ()=>{
         // Arrange
         const payload = {
             id: 'comment-123',
-            ownerid: 'user-123',
+            ownerId: 'user-123',
             content: 'comment',
-            threadid: 'thread-123'
+            threadId: 'thread-123'
         }
         // Action
-        const {id, ownerid, threadid, content} = new RegisteredComment(payload)
+        const {id, ownerId, threadId, content} = new RegisteredComment(payload)
 
         // Assert
         expect(id).toEqual(payload.id)
-        expect(ownerid).toEqual(payload.ownerid)
-        expect(threadid).toEqual(payload.threadid)
+        expect(ownerId).toEqual(payload.ownerId)
+        expect(threadId).toEqual(payload.threadId)
         expect(content).toEqual(payload.content)
     }),
     it('should throw error when payload did not meet data type specification', ()=>{
         const payload = {
             id: 123123,
-            ownerid: 123123,
+            ownerId: 123123,
             content: 123123,
-            threadid: 123123
+            threadId: 123123
         }
 
         expect(()=> new RegisteredComment(payload)).toThrowError('REGISTERED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')

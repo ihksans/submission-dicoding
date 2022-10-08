@@ -28,7 +28,6 @@ class ReplyHandler{
         const deleteCommentUseCase = this._container.getInstance(DeleteReplyUseCase.name)
         const { id } = request.auth.credentials
         const { threadId, commentId, replyId } = request.params
-        console.log("request1: " ,{id, threadId, commentId, replyId})
         const deletedComment = await deleteCommentUseCase.execute(id, replyId, commentId, threadId )
         const response = h.response({
                 status: 'success',

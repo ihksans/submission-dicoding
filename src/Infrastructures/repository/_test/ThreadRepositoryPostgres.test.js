@@ -23,18 +23,15 @@ describe('ThreadRepositoryPostgres', ()=>{
            const registerThread = new RegisterThread({
                 title: 'title thread',
                 body: 'body thread',
-                ownerid: 'user-111'
+                ownerId: 'user-111'
            })
            const fakeIdGenerator = () => '123'
            const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, fakeIdGenerator)
-           
            // stub
            const userId = await UsersTableTestHelper.addUserWithReturnId();
-           
            // Action 
-           registerThread.ownerid = userId
+           registerThread.ownerId = userId
            await threadRepositoryPostgres.addThread(registerThread)
-           
            // Assert
            const threads = await ThreadTableTestHelper.findThreadById('thread-123')
            expect(threads).toHaveLength(1)
@@ -45,27 +42,23 @@ describe('ThreadRepositoryPostgres', ()=>{
                 id: 'thread-555',
                 title: 'title thread',
                 body: 'body thread',
-                ownerid: 'user-111'
+                ownerId: 'user-111'
             })
-            
             // stub
             const userId = await UsersTableTestHelper.addUserWithReturnId();
             const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {});
-            
             // Action 
-            registerThread.ownerid = userId
-            
+            registerThread.ownerId = userId
             // Assert
             await ThreadTableTestHelper.addThread(registerThread)
             const thread = await threadRepositoryPostgres.getThread(registerThread.id);
             expect(thread.title).toEqual(registerThread.title);
             expect(thread.body).toEqual(registerThread.body);
-            expect(thread.ownerid).toEqual(registerThread.ownerid);
+            expect(thread.ownerId).toEqual(registerThread.ownerId);
         }),
         it('should error when thread id not found', async ()=>{
             // Arrange
              const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {})
-
             // Action & Assert
             await expect(threadRepositoryPostgres.getThread('asdasd'))
                 .rejects

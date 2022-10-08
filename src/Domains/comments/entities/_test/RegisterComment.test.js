@@ -3,7 +3,6 @@ describe('a Register Comment entities', ()=>{
     it('should throw error when payload did not contain needed property', ()=>{
         // Arrange
         const payload = { }
-
         // Action and Assert
         expect(()=> new RegisterComment(payload)).toThrowError("REGISTER_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION")
     }),

@@ -9,24 +9,24 @@ exports.up = pgm => {
         content: {
             type: 'TEXT',
           },
-        ownerid: {
+        ownerId: {
          type: 'VARCHAR(50)',
             notNull: true,
             references: '"users"',
             onDelete: 'cascade',
         },
-        commentid: {
+        commentId: {
             type: 'VARCHAR(50)',
             notNull: true,
             references: '"comments"',
             onDelete: 'cascade',
           },
-        createdat: {
+        date: {
               type: 'timestamp',
               notNull: true,
               default: pgm.func('current_timestamp'),
             },
-        deletedat: {
+        deletedAt: {
               type: 'timestamp',
             },
       });

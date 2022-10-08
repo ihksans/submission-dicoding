@@ -6,9 +6,9 @@ class DeleteCommentUseCase {
         this._threadRepository = threadRepository
     }
     async execute(ownerId, threadId, commentId){
-        await this._commentRepository.getComment({id: commentId})
+        await this._commentRepository.getComment(commentId)
         await this._threadRepository.getThread(threadId)
-        return this._commentRepository.deleteComment({id: commentId, ownerId: ownerId})
+        return this._commentRepository.deleteComment(commentId, ownerId)
     }
 }
 module.exports = DeleteCommentUseCase

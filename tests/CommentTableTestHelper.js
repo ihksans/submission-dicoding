@@ -4,19 +4,19 @@ const pool = require('../src/Infrastructures/database/postgres/pool');
 const CommentTableTestHelper = {
     async addComment({
         id = 'comment-123',
-        ownerid = 'user-123',
+        ownerId = 'user-123',
         content = 'content',
-        threadid = 'thread-123'
+        threadId = 'thread-123'
     }){
         const query = {
             text : 'INSERT INTO comments VALUES($1, $2, $3, $4)',
-            values: [id, content, ownerid, threadid],
+            values: [id, content, ownerId, threadId],
         }
         await pool.query(query)
-        return {id, ownerid}
+        return {id, ownerId}
     },
     async cleanTable(){
-        await pool.query('DELETE FROM comments WHERE 1=1');
+        await pool.query('DELETE FROM comments WHERE 1=1')
     },
     async findCommentById(id){
         const query = {

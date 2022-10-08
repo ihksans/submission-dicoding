@@ -24,19 +24,13 @@ describe('ReplyRepositoryPostgres', ()=>{
             const registerReply = new RegisterReply({
                 content: 'reply',
             })
-            const userPayload = {
-                userid: 'user-555',
-                username: 'usernamedev',
-                password: 'secret',
-                fullname: 'usernamedev'
-            }
             const fakeIdGenerator = () => '1237'
             const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator)
             const {commentId, ownerId}  = await ThreadTableTestHelper.addThreadDetailWithReturnAllId()
             // Action 
-            registerReply.ownerid = ownerId
-            registerReply.commentid = commentId
-            const { id } = await replyRepositoryPostgres.addReply(registerReply)
+            registerReply.ownerId = ownerId
+            registerReply.commentId = commentId
+            const { id } = await replyRepositoryPostgres.addReply(registerReply.content, registerReply.ownerId, registerReply.commentId)
             // Assert
             const comment = await ReplyTableTestHelper.findReplyById(id)
             expect(comment).toHaveLength(1)
@@ -47,9 +41,9 @@ describe('ReplyRepositoryPostgres', ()=>{
             const {ownerId, replyId} = await ThreadTableTestHelper.addThreadDetailWithReturnAllId()
             function fakeDateGenerator() {
                 this.toISOString = () => '2022-10-05'
-              }
+            }
             const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, fakeDateGenerator)
-            const { isDeleted } = await replyRepositoryPostgres.deleteReply({id: replyId, ownerId: ownerId })
+            const { isDeleted } = await replyRepositoryPostgres.deleteReply(replyId, ownerId)
             // Action
             expect(isDeleted).toEqual(true)
         })
@@ -60,9 +54,9 @@ describe('ReplyRepositoryPostgres', ()=>{
                 this.toISOString = () => '2022-10-05'
             }
             const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, fakeDateGenerator)
-            const fakeOwnerId = "user-0000"
+            const fakeownerId = "user-0000"
             // Action & Assert
-            await expect(replyRepositoryPostgres.deleteReply({id: commentId, ownerid: fakeOwnerId }))
+            await expect(replyRepositoryPostgres.deleteReply(commentId, fakeownerId))
             .rejects
             .toThrowError(ForbiddenError)
         })
@@ -80,15 +74,14 @@ describe('ReplyRepositoryPostgres', ()=>{
             const fakeIdGenerator = () => '123'
             const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator)
             const {commentId, userId}  = await ThreadTableTestHelper.addThreadWithCommentAndReturnId(userPayload)
-
             // Action 
-            registerReply.ownerid = userId
-            registerReply.commentid = commentId
-            const { id } = await replyRepositoryPostgres.addReply(registerReply)
+            registerReply.ownerId = userId
+            registerReply.commentId = commentId
+            const { id } = await replyRepositoryPostgres.addReply(registerReply.content, registerReply.ownerId,registerReply.commentId)
             // Assert
-            const {content, ownerid} = await replyRepositoryPostgres.getReply({id:id})
+            const {content, ownerId} = await replyRepositoryPostgres.getReply(id)
             expect(content).toEqual(registerReply.content)
-            expect(ownerid).toEqual(registerReply.ownerid)
+            expect(ownerId).toEqual(registerReply.ownerId)
         })
         it('should error when reply id not found', async ()=>{
             const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {})

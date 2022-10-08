@@ -22,8 +22,8 @@ const ServerTestHelper = {
     return result.rows;
   },
   async cleanTable() {
-    await pool.query('DELETE FROM authentications WHERE 1=1');
+    await pool.query('DELETE FROM authentications WHERE 1=1')
   },
-};
+}
 
-module.exports = ServerTestHelper;
+module.exports = ServerTestHelper

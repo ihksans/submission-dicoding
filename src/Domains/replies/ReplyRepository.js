@@ -8,5 +8,8 @@ class ReplyRepository {
     async deleteReply(reply){
         throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED')
     }
+    async getReplies(reply){
+        throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED')
+    }
 }
 module.exports = ReplyRepository

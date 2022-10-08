@@ -6,7 +6,6 @@ const ServerTestHelper = require('../../../../tests/ServerTestHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
 const ReplyTableTestHelper = require('../../../../tests/ReplyTableTestHelper');
-
 describe('/replies endpoint', ()=>{
     afterEach(async ()=>{
         await ReplyTableTestHelper.cleanTable()
@@ -23,23 +22,19 @@ describe('/replies endpoint', ()=>{
             var payload = {
                 content: 'new comment'
             }
-            const ownerid = 'user-9998'
+            const userId = 'user-9998'
             const userPaylaod = {
-                userid: ownerid,
+                userid: userId,
                 username: 'userhelper',
                 password: 'secret',
                 fullname: 'userhelper',
-                id: ownerid
+                id: userId
             }
-
             const {commentId, ownerId, threadId}  = await ThreadTableTestHelper.addThreadDetailWithReturnAllId()
             userPaylaod.userid = ownerId
             const accessToken = await ServerTestHelper.getAccessToken(userPaylaod)
-            
             const server = await createServer(container)
             // Action
-            const url = '/threads/'+threadId+'/comments/'+commentId +'/replies'
-
             const response = await server.inject({
             url: '/threads/'+threadId+'/comments/'+commentId +'/replies',
             method: 'POST',
@@ -60,19 +55,17 @@ describe('/replies endpoint', ()=>{
     describe('when DELETE /threads/{threadId}/comments/{commentId}/replies/{replyId}', ()=>{
         it('should response 200 and delete comments', async () => {
             // Arrange
-            const ownerid = 'user-9998'
+            const userId = 'user-9998'
             const userPaylaod = {
-                userid: ownerid,
+                userid: userId,
                 username: 'userhelper',
                 password: 'secret',
                 fullname: 'userhelper',
-                id: ownerid
+                id: userId
             }
-
             const {replyId, commentId, ownerId, threadId}  = await ThreadTableTestHelper.addThreadDetailWithReturnAllId()
             userPaylaod.userid = ownerId
             const accessToken = await ServerTestHelper.getAccessToken(userPaylaod)
-            
             const server = await createServer(container)
             // Action
             const response = await server.inject({
@@ -86,7 +79,6 @@ describe('/replies endpoint', ()=>{
            const responseJson = JSON.parse(response.payload)
             expect(response.statusCode).toEqual(200)
            expect(responseJson.status).toEqual('success')
-
         })
     })
 })

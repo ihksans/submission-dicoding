@@ -8,18 +8,11 @@ class AddReplyUseCase {
         this._threadRepository = threadRepository
         this._replyRepository = replyRepository
     }
-
     async execute(payload, id, commentId, threadId){
-        console.log("request: ", {id, threadId, commentId,payload })
-       
         const registerReply = new RegisterReply({content: payload})
         await this._threadRepository.getThread(threadId)
-        await this._commentRepository.getComment({id: commentId})
-        return this._replyRepository.addReply({
-            content: registerReply.content, 
-            ownerid: id, 
-            commentid: commentId
-        })
+        await this._commentRepository.getComment(commentId)
+        return this._replyRepository.addReply(registerReply.content, id, commentId)
     }
 }
 module.exports = AddReplyUseCase
