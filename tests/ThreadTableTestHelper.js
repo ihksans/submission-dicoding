@@ -43,6 +43,66 @@ const ThreadTableTestHelper = {
         await pool.query(query)
         return {threadId, userid}
     },
+    async addThreadWithCommentAndReturnId(request) {
+        const {userid, username, password, fullname } = request
+        const userquery = {
+        text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id, username, fullname',
+        values: [userid, username, password, fullname],
+        };
+        await pool.query(userquery)
+        const threadId = 'thread-281'
+        const query = {
+            text : 'INSERT INTO threads VALUES($1, $2, $3, $4)',
+            values: [ threadId, 'thread', 'content thread', userid],
+        }
+        await pool.query(query)
+        const commentId = 'comment-1234';
+        const commentQuery = {
+            text : 'INSERT INTO comments VALUES ($1, $2, $3, $4)',
+            values: ['comment-1234', 'comment', userid, threadId],
+        }
+        await pool.query(commentQuery)
+        return {commentId, threadId, userId: userid}
+    },
+    async addThreadDetailWithReturnAllId() {
+        try {
+            const ownerId = 'user-9998';
+            const user = {
+                userid : ownerId,
+                username: 'userhelper',
+                password: 'secret',
+                fullname: 'userhelper'
+            }
+            const userquery = {
+            text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id, username, fullname',
+            values: [user.userid, user.username, user.password, user.fullname],
+            };
+            await pool.query(userquery)
+            const threadId = 'thread-281'
+            const threadQuery = {
+                text : 'INSERT INTO threads VALUES($1, $2, $3, $4)',
+                values: [ threadId, 'thread', 'content thread', user.userid],
+            }
+            await pool.query(threadQuery)
+            const commentId = 'comment-1234';
+            const commentId2 = 'comment-123';
+            const commentQuery = {
+                text : 'INSERT INTO comments VALUES ($1, $2, $3, $4), ($5, $2, $3, $4)',
+                values: [commentId, 'comment', user.userid, threadId, commentId2],
+            }
+            await pool.query(commentQuery)
+            const replyId = 'reply-1234';
+            const replyId2 = 'reply-123';
+            const replyQuery = {
+                text : 'INSERT INTO replies VALUES ($1, $2, $3, $4), ($5, $2, $3, $4)',
+                values: [replyId, 'reply', user.userid, commentId, replyId2],
+            }
+            await pool.query(replyQuery)
+            return {ownerId, threadId, commentId, replyId}
+        } catch (error) {
+            return {error}
+        }
+    },
     async addThreadDetailWithReturnId() {
         try {
             const user = {
@@ -73,7 +133,7 @@ const ThreadTableTestHelper = {
             return error
         }
       
-    },
+    }
 }
 
 module.exports = ThreadTableTestHelper

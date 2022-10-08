@@ -6,12 +6,14 @@ exports.up = pgm => {
           type: 'VARCHAR(50)',
           primaryKey: true,
         },
-        body: {
+        content: {
             type: 'TEXT',
           },
         ownerid: {
-          type: 'VARCHAR(50)',
-          notNull: true,
+         type: 'VARCHAR(50)',
+            notNull: true,
+            references: '"users"',
+            onDelete: 'cascade',
         },
         commentid: {
             type: 'VARCHAR(50)',
@@ -19,12 +21,12 @@ exports.up = pgm => {
             references: '"comments"',
             onDelete: 'cascade',
           },
-        createdAt: {
+        createdat: {
               type: 'timestamp',
               notNull: true,
               default: pgm.func('current_timestamp'),
             },
-        deletedAt: {
+        deletedat: {
               type: 'timestamp',
             },
       });
