@@ -35,6 +35,9 @@ describe('ThreadRepositoryPostgres', ()=>{
            // Assert
            const threads = await ThreadTableTestHelper.findThreadById('thread-123')
            expect(threads).toHaveLength(1)
+           expect(threads[0].ownerId).toEqual(registerThread.ownerId)
+           expect(threads[0].title).toEqual(registerThread.title)
+           expect(threads[0].body).toEqual(registerThread.body)
         }),
         it('should correct get thread detail by thread id', async ()=>{
             // Arrange
@@ -79,6 +82,22 @@ describe('ThreadRepositoryPostgres', ()=>{
              await expect( threadRepositoryPostgres.getThreadDetail("jjj"))
              .rejects
              .toThrowError(NotFoundError)
-         })
+        })
+    })
+    describe('verifyThreadAvaibility function', ()=>{
+        it('should verify thread avaibility', async ()=>{
+            // stub
+            const threadId = await ThreadTableTestHelper.addThreadDetailWithReturnId()
+            const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {})
+            const  thread  = await threadRepositoryPostgres.verifyThreadAvaibility(threadId)
+            expect(thread).toHaveLength(1)
+        })
+        it('should error when thread id not found', async ()=>{
+            // stub
+            const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {})
+            await expect( threadRepositoryPostgres.verifyThreadAvaibility("jjj"))
+            .rejects
+            .toThrowError(NotFoundError)
+        })
     })
 })

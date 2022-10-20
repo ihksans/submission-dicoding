@@ -3,7 +3,6 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper')
 const pool = require('../../database/postgres/pool');
 const ForbiddenError = require('../../../Commons/exceptions/ForbiddenError');
-const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const ReplyTableTestHelper = require('../../../../tests/ReplyTableTestHelper');
 const RegisterReply = require('../../../Domains/replies/entities/RegisterReply');
 const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
@@ -35,6 +34,9 @@ describe('ReplyRepositoryPostgres', ()=>{
             // Assert
             const comment = await ReplyTableTestHelper.findReplyById(id)
             expect(comment).toHaveLength(1)
+            expect(comment[0].ownerId).toEqual(registerReply.ownerId)
+            expect(comment[0].commentId).toEqual(registerReply.commentId)
+            expect(comment[0].content).toEqual(registerReply.content)
         })
     })
     describe('delete reply function', ()=>{
@@ -84,13 +86,6 @@ describe('ReplyRepositoryPostgres', ()=>{
             expect(content).toEqual(registerReply.content)
             expect(ownerId).toEqual(registerReply.ownerId)
         })
-        it('should error when reply id not found', async ()=>{
-            const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {})
-            // Assert
-            await expect(replyRepositoryPostgres.getReply('asdasd'))
-                .rejects
-                .toThrowError(NotFoundError)
-        })
     })
     describe('get replies function', ()=>{
         it('should returns replies correctly', async ()=>{
@@ -99,6 +94,29 @@ describe('ReplyRepositoryPostgres', ()=>{
             const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool)
             const replies = await replyRepositoryPostgres.getReplies(commentId)
             expect(replies).toHaveLength(2)
+        })
+        it('should error when reply id not found', async ()=>{
+            const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {})
+            // Assert
+            await expect(replyRepositoryPostgres.getReply('asdasd'))
+                .rejects
+                .toThrowError(NotFoundError)
+        })
+    })
+    describe('verifyReplyAvaibility function', ()=>{
+        it('should verify thread avaibility correcly', async ()=>{
+            // stub
+            const {replyId} = await ThreadTableTestHelper.addThreadDetailWithReturnAllId()
+            const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool)
+            const reply = await replyRepositoryPostgres.verifyReplyAvaibility(replyId)
+            expect(reply).toHaveLength(1)
+        })
+        it('should error when reply id not found', async ()=>{
+            const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {})
+            // Assert
+            await expect(replyRepositoryPostgres.verifyReplyAvaibility('asdasd'))
+                .rejects
+                .toThrowError(NotFoundError)
         })
     })
 })
