@@ -30,7 +30,7 @@ class ReplyRepositoryPostgres extends ReplyRepository{
             throw new ForbiddenError('User tidak memiliki akses') 
         }
         else{
-            return {isDeleted: true}
+            return {isDeleted: true, deletedAt: date}
         }
     }
     async getReply(id){

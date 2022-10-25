@@ -17,7 +17,7 @@ describe('CommentRepositoryPostgres', ()=>{
         await pool.end
     })
     describe('addComment function', ()=>{
-        it('should persist register thread and return registered thread correctly', async()=>{
+        it('should persist register comment and return registered comment correctly', async()=>{
             // Arrange 
             const registerComment = new RegisterComment({
                 content: 'comment',
@@ -35,13 +35,13 @@ describe('CommentRepositoryPostgres', ()=>{
             // Action 
             registerComment.ownerId = userid
             registerComment.threadId = threadId
-            await commentRepositoryPostgres.addComment(registerComment.content, registerComment.ownerId, registerComment.threadId)
+            const comment = await commentRepositoryPostgres.addComment(registerComment.content, registerComment.ownerId, registerComment.threadId)
             // Assert
             const response = await CommentTableTestHelper.findCommentById(commentId)
             expect(response).toHaveLength(1)
-            expect(response[0].id).toEqual(commentId)
-            expect(response[0].content).toEqual(registerComment.content)
-            expect(response[0].ownerId).toEqual(userid)
+            expect(comment.id).toEqual(commentId)
+            expect(comment.content).toEqual(registerComment.content)
+            expect(comment.owner).toEqual(userid)
             expect(response[0].threadId).toEqual(threadId)
         })
     }),
@@ -70,9 +70,15 @@ describe('CommentRepositoryPostgres', ()=>{
             }
             const fakeIdGenerator = () => '123'
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator, fakeDateGenerator)
-            const { isDeleted } = await commentRepositoryPostgres.deleteComment(commentId, userid )
+            const { isDeleted, deletedAt } = await commentRepositoryPostgres.deleteComment(commentId, userid )
+            const comment  = await CommentTableTestHelper.findCommentById(commentId)
+
             // Action
             expect(isDeleted).toEqual(true)
+            expect(deletedAt).not.toBeNull()
+            expect(deletedAt).toBeDefined()
+            expect(comment[0].deletedAt).not.toBeNull()
+            expect(comment[0].deletedAt).toBeDefined()
         }),
         it('should throw error forbiden to delete comment', async()=>{
             // Arrange

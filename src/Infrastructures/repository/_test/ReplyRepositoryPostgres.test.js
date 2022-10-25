@@ -30,13 +30,14 @@ describe('ReplyRepositoryPostgres', ()=>{
             // Action 
             registerReply.ownerId = ownerId
             registerReply.commentId = commentId
-            const { id } = await replyRepositoryPostgres.addReply(registerReply.content, registerReply.ownerId, registerReply.commentId)
+            const { id, owner, content } = await replyRepositoryPostgres.addReply(registerReply.content, registerReply.ownerId, registerReply.commentId)
             // Assert
             const comment = await ReplyTableTestHelper.findReplyById(id)
             expect(comment).toHaveLength(1)
-            expect(comment[0].ownerId).toEqual(registerReply.ownerId)
+            expect(owner).toEqual(registerReply.ownerId)
+            expect(content).toEqual(registerReply.content)
             expect(comment[0].commentId).toEqual(registerReply.commentId)
-            expect(comment[0].content).toEqual(registerReply.content)
+            expect(id).toEqual("reply-1237")
         })
     })
     describe('delete reply function', ()=>{
@@ -46,9 +47,14 @@ describe('ReplyRepositoryPostgres', ()=>{
                 this.toISOString = () => '2022-10-05'
             }
             const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {}, fakeDateGenerator)
-            const { isDeleted } = await replyRepositoryPostgres.deleteReply(replyId, ownerId)
+            const { isDeleted, deletedAt } = await replyRepositoryPostgres.deleteReply(replyId, ownerId)
+            const reply  = await ReplyTableTestHelper.findReplyById(replyId)
             // Action
             expect(isDeleted).toEqual(true)
+            expect(deletedAt).toBeDefined()
+            expect(deletedAt).not.toBeNull()
+            expect(reply[0].deletedAt).not.toBeNull()
+            expect(reply[0].deletedAt).toBeDefined()
         })
         it('should throw error forbiden to delete reply', async()=>{
             // stub
@@ -82,9 +88,10 @@ describe('ReplyRepositoryPostgres', ()=>{
             registerReply.commentId = commentId
             const { id } = await replyRepositoryPostgres.addReply(registerReply.content, registerReply.ownerId,registerReply.commentId)
             // Assert
-            const {content, ownerId} = await replyRepositoryPostgres.getReply(id)
-            expect(content).toEqual(registerReply.content)
-            expect(ownerId).toEqual(registerReply.ownerId)
+            const reply = await replyRepositoryPostgres.getReply(id)
+            expect(reply.content).toEqual(registerReply.content)
+            expect(reply.ownerId).toEqual(registerReply.ownerId)
+            expect(reply.id).toEqual(id)
         })
     })
     describe('get replies function', ()=>{

@@ -31,12 +31,13 @@ describe('ThreadRepositoryPostgres', ()=>{
            const userId = await UsersTableTestHelper.addUserWithReturnId();
            // Action 
            registerThread.ownerId = userId
-           await threadRepositoryPostgres.addThread(registerThread)
+           const {id, owner, title} = await threadRepositoryPostgres.addThread(registerThread)
            // Assert
            const threads = await ThreadTableTestHelper.findThreadById('thread-123')
            expect(threads).toHaveLength(1)
-           expect(threads[0].ownerId).toEqual(registerThread.ownerId)
-           expect(threads[0].title).toEqual(registerThread.title)
+           expect(id).toEqual('thread-123')
+           expect(owner).toEqual(registerThread.ownerId)
+           expect(title).toEqual(registerThread.title)
            expect(threads[0].body).toEqual(registerThread.body)
         }),
         it('should correct get thread detail by thread id', async ()=>{
@@ -55,6 +56,7 @@ describe('ThreadRepositoryPostgres', ()=>{
             // Assert
             await ThreadTableTestHelper.addThread(registerThread)
             const thread = await threadRepositoryPostgres.getThread(registerThread.id);
+            expect(thread.id).toEqual(registerThread.id);
             expect(thread.title).toEqual(registerThread.title);
             expect(thread.body).toEqual(registerThread.body);
             expect(thread.ownerId).toEqual(registerThread.ownerId);
@@ -71,10 +73,14 @@ describe('ThreadRepositoryPostgres', ()=>{
     describe('getThread function', ()=>{
         it('should get thread correctly', async()=>{
            // stub
-            const threadId = await ThreadTableTestHelper.addThreadDetailWithReturnId()
+            const thread = await ThreadTableTestHelper.addThreadDetailWithReturnItem()
             const threadRepositoryPostgres = new ThreadRepositoryPostres(pool, {})
-            const  { id }  = await threadRepositoryPostgres.getThreadDetail(threadId)
-            expect(id).toEqual(threadId)
+            const  { id, title, body, username, date }  = await threadRepositoryPostgres.getThreadDetail(thread.id)
+            expect(id).toEqual(thread.id)
+            expect(thread.title).toEqual(title)
+            expect(thread.body).toEqual(body)
+            expect(thread.username).toEqual(username)
+            expect(thread.date).toEqual(date)
         }),
         it('should throw error to get thread unregistered', async()=>{
             // stub

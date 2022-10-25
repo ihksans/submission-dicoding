@@ -29,7 +29,7 @@ class CommentRepositoryPostgres extends CommentRepository{
             throw new ForbiddenError('User tidak memiliki akses') 
         }
         else{
-            return {isDeleted: true}
+            return {isDeleted: true, deletedAt: date}
         }
     }
     async getComment(id){
